@@ -1,0 +1,48 @@
+{
+	"name": "week1",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"watch": {
+		"build": {
+			"patterns": [
+				"src"
+			],
+			"extensions": "js,jsx"
+		}
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack",
+		"start": "webpack-dev-server --open",
+		"watch": "npm-watch",
+		"deploy": "firebase deploy"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@babel/core": "^7.20.12",
+		"@babel/preset-env": "^7.20.2",
+		"@babel/preset-react": "^7.18.6",
+		"babel-loader": "^9.1.2",
+		"babel-plugin-styled-components": "^2.0.7",
+		"css-loader": "^6.7.3",
+		"eslint": "^8.31.0",
+		"eslint-config-react-app": "^7.0.1",
+		"eslint-plugin-react": "^7.31.11",
+		"style-loader": "^3.3.1",
+		"webpack-cli": "^5.0.1",
+		"webpack-dev-server": "^4.11.1"
+	},
+	"dependencies": {
+		"localforage": "^1.10.0",
+		"match-sorter": "^6.3.1",
+		"npm-watch": "^0.11.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-router-dom": "^6.6.2",
+		"sort-by": "^1.2.0",
+		"styled-components": "^5.3.6"
+	}
+}
