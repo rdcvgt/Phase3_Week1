@@ -1,7 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { db } from "../../index";
+import {
+	collection,
+	addDoc,
+	query,
+	orderBy,
+	getDocs,
+	deleteDoc,
+	doc,
+	serverTimestamp,
+} from "firebase/firestore";
+import firebase from "firebase/compat/app";
 
 const Root = styled.div``;
 const InputArea = styled.div`
@@ -83,27 +95,55 @@ Todo.propTypes = {
 export default function ListPage() {
 	const [todos, setTodos] = useState([]);
 	const [value, setValue] = useState("");
-	const id = useRef(0);
 
 	const handleInputChange = (e) => {
 		setValue(e.target.value);
 	};
 
 	const handleButtonClick = () => {
-		setTodos([
-			{
-				id: id.current,
-				content: value,
-			},
-			...todos,
-		]);
+		//添加 todo 到 fireStore 中
+		//確定成功回傳後，setTodos 新增 todo
+		//透過回傳的亂數 id 作爲 todo.id 使用於 map 時所需的 key 值
+		addDoc(collection(db, "user"), {
+			content: value,
+			createdAt: serverTimestamp(),
+		})
+			.then((res) => res.id)
+			.then((id) => {
+				setTodos([
+					{
+						id,
+						content: value,
+					},
+					...todos,
+				]);
+			});
+
 		setValue("");
-		id.current++;
 	};
 
 	const handleDeleteTodo = (id) => {
-		setTodos(todos.filter((todo) => todo.id !== id));
+		//刪除 fireStore 中的 todo，並且重新 setTodos
+		deleteDoc(doc(db, "user", id)).then(() => {
+			setTodos(todos.filter((todo) => todo.id !== id));
+		});
 	};
+
+	//初始化 todoList，從fireStore 撈已儲存的 todos 存成陣列
+	//再透過 setTodos 更新資料
+	useEffect(() => {
+		const todoDb = collection(db, "user");
+		let todoList = [];
+		getDocs(query(todoDb, orderBy("createdAt", "desc")))
+			.then((snap) => {
+				snap.forEach((doc) => {
+					todoList.push({ id: doc.id, content: doc.data().content });
+				});
+			})
+			.then(() => {
+				setTodos(todoList);
+			});
+	}, []);
 
 	return (
 		<Root>
