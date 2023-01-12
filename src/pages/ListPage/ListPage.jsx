@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
@@ -13,7 +13,6 @@ import {
 	doc,
 	serverTimestamp,
 } from "firebase/firestore";
-import firebase from "firebase/compat/app";
 
 const Root = styled.div``;
 const InputArea = styled.div`
